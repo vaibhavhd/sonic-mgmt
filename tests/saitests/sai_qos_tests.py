@@ -1164,7 +1164,8 @@ class WRRtest(sai_base_test.ThriftInterfaceDataPlane):
                     ip_src=src_port_ip,
                     ip_dst=dst_port_ip,
                     ip_ttl=64)
-        send_packet(self, src_port_id, pkt, pkts_num_leak_out)
+        # TODO add checks for sent packets count
+        sent = send_packet(self, src_port_id, pkt, pkts_num_leak_out)
 
         # Get a snapshot of counter values
         port_counters_base, queue_counters_base = sai_thrift_read_port_counters(self.client, port_list[dst_port_id])
@@ -1295,10 +1296,11 @@ class WRRtest(sai_base_test.ThriftInterfaceDataPlane):
         queue_num_of_pkts[4]  = queue_4_num_of_pkts
         queue_num_of_pkts[46] = queue_5_num_of_pkts
         queue_num_of_pkts[48] = queue_6_num_of_pkts
+        total_queue_pkts = queue_0_num_of_pkts + queue_1_num_of_pkts + queue_2_num_of_pkts + queue_3_num_of_pkts\
+            + queue_4_num_of_pkts + queue_5_num_of_pkts + queue_6_num_of_pkts
+
         total_pkts = 0
-
         diff_list = []
-
         for pkt_to_inspect in pkts:
             dscp_of_pkt = pkt_to_inspect.payload.tos >> 2
             total_pkts += 1
@@ -1307,13 +1309,14 @@ class WRRtest(sai_base_test.ThriftInterfaceDataPlane):
 
             queue_pkt_counters[dscp_of_pkt] += 1
             if queue_pkt_counters[dscp_of_pkt] == queue_num_of_pkts[dscp_of_pkt]:
-                 diff_list.append((dscp_of_pkt, (queue_0_num_of_pkts + queue_1_num_of_pkts + queue_2_num_of_pkts + queue_3_num_of_pkts + queue_4_num_of_pkts + queue_5_num_of_pkts + queue_6_num_of_pkts) - total_pkts))
-
+                 diff_list.append((dscp_of_pkt, total_queue_pkts - total_pkts))
+            # TODO - add check for greater than OR replace == with >=. Can an extra packet will ever be received though??
             print >> sys.stderr, queue_pkt_counters
 
         print >> sys.stderr, "Difference for each dscp: "
         print >> sys.stderr, diff_list
 
+        # TODO add check for empty diff_list
         for dscp, diff in diff_list:
             assert diff < limit, "Difference for %d is %d which exceeds limit %d" % (dscp, diff, limit)
 
@@ -1322,8 +1325,10 @@ class WRRtest(sai_base_test.ThriftInterfaceDataPlane):
         port_counters, queue_counters = sai_thrift_read_port_counters(self.client, port_list[dst_port_id])
         print >> sys.stderr, map(operator.sub, queue_counters, queue_counters_base)
 
+        # Get a snapshot of counter values
+        port_counters_base, queue_counters_base = sai_thrift_read_port_counters(self.client, port_list[dst_port_id])
         # All packets sent should be received intact
-        assert(queue_0_num_of_pkts + queue_1_num_of_pkts + queue_2_num_of_pkts + queue_3_num_of_pkts + queue_4_num_of_pkts + queue_5_num_of_pkts + queue_6_num_of_pkts == total_pkts)
+        assert(total_queue_pkts == total_pkts)
 
 class LossyQueueTest(sai_base_test.ThriftInterfaceDataPlane):
     def runTest(self):
