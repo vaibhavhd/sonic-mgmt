@@ -203,6 +203,11 @@ class VMTopology(object):
         else:
             self.host_interfaces = []
 
+        if 'disabled_host_interfaces' in topo:
+            self.disabled_host_interfaces = topo['disabled_host_interfaces']
+        else:
+            self.disabled_host_interfaces = []
+
         self.duts_fp_ports = duts_fp_ports
 
         self.injected_fp_ports = self.extract_vm_vlans()
@@ -621,7 +626,7 @@ class VMTopology(object):
         return
 
 
-    def add_host_ports(self):
+    def add_host_ports(self, topo):
         """
         add dut port in the ptf docker
 
@@ -631,6 +636,8 @@ class VMTopology(object):
 
         self.update()
         for i, intf in enumerate(self.host_interfaces):
+            if intf in self.disabled_host_interfaces:
+                continue
             if self._is_multi_duts:
                 if isinstance(intf, list):
                     # create veth link and inject one end into the ptf docker
@@ -1016,7 +1023,7 @@ def main():
                 net.add_bp_port_to_docker(ptf_bp_ip_addr, ptf_bp_ipv6_addr)
 
             if hostif_exists:
-                net.add_host_ports()
+                net.add_host_ports(topo)
         elif cmd == 'unbind':
             check_params(module, ['vm_set_name',
                                   'topo',
@@ -1099,7 +1106,7 @@ def main():
                 net.add_injected_fp_ports_to_docker()
                 net.bind_fp_ports()
             if hostif_exists:
-                net.add_host_ports()
+                net.add_host_ports(topo)
         elif cmd == 'connect-vms' or cmd == 'disconnect-vms':
             check_params(module, ['vm_set_name',
                                   'topo',
