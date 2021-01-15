@@ -106,7 +106,7 @@ def populate_peer_info(neighbors, fanout_info, port):
     peer_dev = neighbors[port]['peerdevice']
     peer_port = neighbors[port]['peerport']
     peer_info = {'peerdevice': peer_dev,
-                 'hwsku': fanout_info[peer_dev]['device_info']['HwSku'],
+                 'hwsku': fanout_info[peer_dev]['device_info'][peer_dev]['HwSku'],
                  'pfc_fanout_interface': peer_port
                 }
     return peer_info

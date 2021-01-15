@@ -267,7 +267,7 @@ class PFCMultiStorm(object):
         for peer_dev in self.peer_params:
             peer_dev_info = self.fanout_graph[peer_dev]['device_info']
             peer_info = {'peerdevice': peer_dev,
-                         'hwsku': peer_dev_info['HwSku'],
+                         'hwsku': peer_dev_info[peer_dev]['HwSku'],
                          'pfc_fanout_interface': self.peer_params[peer_dev]['intfs']
                         }
 
