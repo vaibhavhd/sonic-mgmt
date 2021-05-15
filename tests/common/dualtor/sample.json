@@ -1,0 +1,47 @@
+{
+    "offset_from_kexec": {        
+        "init_view": "",
+        "syncd_create_switch": "",
+        "sai_create_switch": "",
+        "apply_view": "",
+        "db_ready": "",
+        "port_init": "58.190113",
+        "port_ready": "",
+        "lag_ready": "39.282395", 
+        "neighbor_entry": "61.836979", 
+        "default_route_set": "69.93171",
+        "finalizer": "1.257536"
+    },
+    "time_span": {
+        "radv": "73.579099", 
+        "bgp": "54.634928", 
+        "syncd": "37.662354",
+        "swss": "43.406041", 
+        "teamd": "56.61588", 
+        "init_view": "5.386714",
+        "syncd_create_switch": "",
+        "sai_create_switch": "11.904239",
+        "apply_view": "0.001785",
+        "db_ready": "",
+        "all_neighbor_entries": "",
+        "port_init": "",
+        "port_ready": "",
+        "finalizer": "1.257536"
+    },
+    "reboot_type": "fast", 
+    "dataplane": {
+        "downtime": "N/A", 
+        "lost_packets": "N/A", 
+        "longest_downtime": "29.357011"
+    },
+    "controlplane": {
+        "downtime": "",
+        "arp_ping": ""
+    }
+}
+
+        // Brcm only: 
+        // May 11 18:00:30.567691 str-7260cx3-acs-1 INFO syncd#syncd: [none] SAI_API_SWITCH:brcm_sai_create_switch:1005 SAI Timing: SDK init time 12 seconds
+        
+        // May 11 18:00:31.634630 str-7260cx3-acs-1 NOTICE syncd#syncd: :- performWarmRestartSingleSwitch: Warm boot: create switch VID: oid:0x21000000000000 took 13.966605 sec
+        // # May 11 18:00:04.760931 str-7260cx3-acs-1 NOTICE root: WARMBOOT_FINALIZER : Database is ready...

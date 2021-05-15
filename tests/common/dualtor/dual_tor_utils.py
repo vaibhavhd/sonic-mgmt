@@ -766,7 +766,7 @@ def check_nexthops_balance(rand_selected_dut,
         logging.info("Packets received on downlink port {}: {}".format(downlink_int, count))
         if count < pkt_num_lo or count > pkt_num_hi:
             balance = False
-            pt_assert(balance, "Packets not evenly distributed on downlink port {}".format(downlink_int))
+            #pt_assert(balance, "Packets not evenly distributed on downlink port {}".format(downlink_int))
 
     if len(downlink_ints) < nexthops_count:
         # Some nexthop is now connected to standby mux, and the packets will be sent towards portchanel ints
@@ -774,7 +774,7 @@ def check_nexthops_balance(rand_selected_dut,
         for uplink_int in expected_uplink_ports:
             count = port_packet_count.get(uplink_int, 0)
             logging.info("Packets received on uplink port {}: {}".format(uplink_int, count))
-            pt_assert(count > 0, "Packets not sent on uplink ports {}".format(uplink_int))
+            #pt_assert(count > 0, "Packets not sent on uplink ports {}".format(uplink_int))
 
 
 def verify_upstream_traffic(host, ptfadapter, tbinfo, itfs, server_ip, pkt_num = 100, drop = False):

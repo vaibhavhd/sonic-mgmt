@@ -128,7 +128,7 @@ def _apply_dual_tor_state_to_orchagent(dut, state, tor_mux_intfs):
 
     set_dual_tor_state_to_orchagent(dut, state, tor_mux_intfs)
     yield
-    del_dual_tor_state_from_orchagent(dut, state, tor_mux_intfs)
+    #del_dual_tor_state_from_orchagent(dut, state, tor_mux_intfs)
 
 
 def is_mocked_dualtor(tbinfo):
@@ -309,17 +309,17 @@ def apply_peer_switch_table_to_dut(cleanup_mocked_configs, rand_selected_dut, mo
         time.sleep(120)
 
     yield
-    logger.info("Removing peer switch table")
+    # logger.info("Removing peer switch table")
 
-    cmds=['redis-cli -n 4 DEL "{}"'.format(peer_switch_key),
-          'redis-cli -n 4 HDEL"{}" "{}" "{}"'.format(device_meta_key, 'subtype', 'DualToR'),
-          'redis-cli -n 4 HDEL "{}" "{}" "{}"'.format(device_meta_key, 'peer_switch', peer_switch_hostname)]
-    dut.shell_cmds(cmds=cmds)
-    if dut.get_asic_name() == 'th2':
-        # Restart swss on TH2 platform
-        logger.info("Restarting swss service")
-        dut.shell('systemctl restart swss')
-        time.sleep(120)
+    # cmds=['redis-cli -n 4 DEL "{}"'.format(peer_switch_key),
+    #       'redis-cli -n 4 HDEL"{}" "{}" "{}"'.format(device_meta_key, 'subtype', 'DualToR'),
+    #       'redis-cli -n 4 HDEL "{}" "{}" "{}"'.format(device_meta_key, 'peer_switch', peer_switch_hostname)]
+    # dut.shell_cmds(cmds=cmds)
+    # if dut.get_asic_name() == 'th2':
+    #     # Restart swss on TH2 platform
+    #     logger.info("Restarting swss service")
+    #     dut.shell('systemctl restart swss')
+    #     time.sleep(120)
         
     return
 
@@ -414,6 +414,6 @@ def cleanup_mocked_configs(duthost, tbinfo):
 
     yield
 
-    if is_t0_mocked_dualtor(tbinfo):
-        logger.info("Load minigraph to reset the DUT %s", duthost.hostname)
-        config_reload(duthost, config_source="minigraph")
+    # if is_t0_mocked_dualtor(tbinfo):
+    #     logger.info("Load minigraph to reset the DUT %s", duthost.hostname)
+    #     config_reload(duthost, config_source="minigraph")
